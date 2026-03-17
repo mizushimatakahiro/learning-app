@@ -125,6 +125,12 @@
         continue;
       }
 
+      // Explanation line
+      if (line.startsWith('explanation:') || line.startsWith('explanation：')) {
+        q.explanation = line.replace(/^explanation[:：]\s*/, '').trim();
+        continue;
+      }
+
       // Choice lines: - A: text
       const choiceMatch = line.match(/^- ([A-D])[:：]\s*(.+)/);
       if (choiceMatch) {
@@ -578,7 +584,8 @@
       resultEl.classList.add('incorrect-result');
       resultEl.innerHTML =
         '<div class="result-label">不正解</div>' +
-        '<div class="result-answer">正解: ' + esc(q.answer) + ' - ' + esc(correctText || '') + '</div>';
+        '<div class="result-answer">正解: ' + esc(q.answer) + ' - ' + esc(correctText || '') + '</div>' +
+        (q.explanation ? '<div class="result-explanation">' + esc(q.explanation) + '</div>' : '');
     }
 
     $('#yontaku-next').classList.remove('hidden');
