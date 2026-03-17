@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="学習アプリ - ナレッジ学習ツール">
+  <title>学習アプリ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header id="header">
+      <button id="back-btn" class="header-btn hidden" aria-label="戻る">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1 id="header-title">学習アプリ</h1>
+      <div class="header-spacer"></div>
+    </header>
+
+    <!-- Top Page -->
+    <main id="top-page" class="page active">
+      <div class="top-buttons">
+        <button class="main-btn" data-page="report">
+          <span class="btn-icon">📖</span>
+          <div class="btn-content">
+            <span class="btn-label">レポート</span>
+            <span class="btn-desc">学習内容を確認する</span>
+          </div>
+          <span class="btn-arrow">›</span>
+        </button>
+        <button class="main-btn" data-page="marubatsu">
+          <span class="btn-icon">⭕</span>
+          <div class="btn-content">
+            <span class="btn-label">○×テスト</span>
+            <span class="btn-desc">正誤問題で理解度チェック</span>
+          </div>
+          <span class="btn-arrow">›</span>
+        </button>
+        <button class="main-btn" data-page="yontaku">
+          <span class="btn-icon">🔢</span>
+          <div class="btn-content">
+            <span class="btn-label">4択問題</span>
+            <span class="btn-desc">選択問題で知識を定着</span>
+          </div>
+          <span class="btn-arrow">›</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- Report Page -->
+    <div id="report-page" class="page">
+      <div class="sub-buttons">
+        <button class="sub-btn" data-section="内部統制">
+          <span class="sub-num">01</span>
+          <span>内部統制</span>
+        </button>
+        <button class="sub-btn" data-section="リスクマネジメント">
+          <span class="sub-num">02</span>
+          <span>リスクマネジメント</span>
+        </button>
+        <button class="sub-btn" data-section="与信管理_1">
+          <span class="sub-num">03</span>
+          <span>与信管理_1</span>
+        </button>
+        <button class="sub-btn" data-section="与信管理_2">
+          <span class="sub-num">04</span>
+          <span>与信管理_2</span>
+        </button>
+        <button class="sub-btn" data-section="与信管理_3">
+          <span class="sub-num">05</span>
+          <span>与信管理_3</span>
+        </button>
+        <button class="sub-btn" data-section="与信管理_4">
+          <span class="sub-num">06</span>
+          <span>与信管理_4</span>
+        </button>
+        <button class="sub-btn" data-section="与信管理_5">
+          <span class="sub-num">07</span>
+          <span>与信管理_5</span>
+        </button>
+        <button class="sub-btn" data-section="与信管理_6">
+          <span class="sub-num">08</span>
+          <span>与信管理_6</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Report Content Page -->
+    <div id="report-content-page" class="page">
+      <div id="report-content" class="content-area"></div>
+    </div>
+
+    <!-- ○× Test Page -->
+    <div id="marubatsu-page" class="page">
+      <div class="test-menu">
+        <div class="test-hero">
+          <div class="test-hero-icon">⭕</div>
+          <div class="test-hero-title">○×テスト</div>
+          <div class="test-hero-desc">各問題の正誤を判断しましょう<br>ランダム20問出題されます</div>
+        </div>
+        <button class="start-btn" id="marubatsu-start">テスト開始</button>
+        <button class="review-btn" id="marubatsu-review">復習モード</button>
+        <div id="marubatsu-stats" class="stats-area"></div>
+      </div>
+    </div>
+
+    <!-- ○× Quiz Page -->
+    <div id="marubatsu-quiz-page" class="page">
+      <div class="quiz-container">
+        <div class="quiz-progress">
+          <span id="marubatsu-progress-text"></span>
+          <div class="progress-bar"><div id="marubatsu-progress-bar" class="progress-fill"></div></div>
+        </div>
+        <div class="quiz-category" id="marubatsu-category"></div>
+        <div class="quiz-question" id="marubatsu-question"></div>
+        <div class="marubatsu-buttons">
+          <button class="answer-btn maru-btn" data-answer="○">○</button>
+          <button class="answer-btn batsu-btn" data-answer="×">×</button>
+        </div>
+        <div id="marubatsu-result" class="quiz-result hidden"></div>
+        <button id="marubatsu-next" class="next-btn hidden">次の問題</button>
+      </div>
+    </div>
+
+    <!-- ○× Result Page -->
+    <div id="marubatsu-result-page" class="page">
+      <div class="result-container" id="marubatsu-final-result"></div>
+    </div>
+
+    <!-- 4択 Test Page -->
+    <div id="yontaku-page" class="page">
+      <div class="test-menu">
+        <div class="test-hero">
+          <div class="test-hero-icon">🔢</div>
+          <div class="test-hero-title">4択問題</div>
+          <div class="test-hero-desc">4つの選択肢から正解を選びましょう<br>ランダム20問出題されます</div>
+        </div>
+        <button class="start-btn" id="yontaku-start">テスト開始</button>
+        <button class="review-btn" id="yontaku-review">復習モード</button>
+        <div id="yontaku-stats" class="stats-area"></div>
+      </div>
+    </div>
+
+    <!-- 4択 Quiz Page -->
+    <div id="yontaku-quiz-page" class="page">
+      <div class="quiz-container">
+        <div class="quiz-progress">
+          <span id="yontaku-progress-text"></span>
+          <div class="progress-bar"><div id="yontaku-progress-bar" class="progress-fill"></div></div>
+        </div>
+        <div class="quiz-category" id="yontaku-category"></div>
+        <div class="quiz-question" id="yontaku-question"></div>
+        <div class="yontaku-choices" id="yontaku-choices"></div>
+        <div id="yontaku-result" class="quiz-result hidden"></div>
+        <button id="yontaku-next" class="next-btn hidden">次の問題</button>
+      </div>
+    </div>
+
+    <!-- 4択 Result Page -->
+    <div id="yontaku-result-page" class="page">
+      <div class="result-container" id="yontaku-final-result"></div>
+    </div>
+
+    <!-- Review Page -->
+    <div id="review-page" class="page">
+      <div class="review-container" id="review-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
