@@ -385,8 +385,14 @@
     };
     showPage(prev, titles[prev] || '学習アプリ');
 
-    if (prev === 'marubatsu-page') showMarubatsuStats();
-    if (prev === 'yontaku-page') showYontakuStats();
+    if (prev === 'marubatsu-page') {
+      showMarubatsuStats();
+      renderCategoryButtons('marubatsu-categories', state.marubatsuQuestions, startMarubatsu, 'marubatsu');
+    }
+    if (prev === 'yontaku-page') {
+      showYontakuStats();
+      renderCategoryButtons('yontaku-categories', state.yontakuQuestions, startYontaku, 'yontaku');
+    }
   }
 
   // --- Report ---
@@ -398,6 +404,46 @@
       $('#report-content').innerHTML = mdToHtml(content);
     }
     showPage('report-content-page', section);
+  }
+
+  // --- Category Selection ---
+  function getCategories(questions) {
+    const cats = [];
+    const seen = {};
+    for (const q of questions) {
+      if (q.category && !seen[q.category]) {
+        seen[q.category] = true;
+        cats.push(q.category);
+      }
+    }
+    return cats;
+  }
+
+  function renderCategoryButtons(containerId, questions, startFn, type) {
+    const container = $('#' + containerId);
+    if (!container) return;
+    container.innerHTML = '';
+
+    // "全ジャンル" button
+    const allBtn = document.createElement('button');
+    allBtn.className = 'category-btn all-category';
+    allBtn.innerHTML = '<span class="cat-icon">🎯</span><span class="cat-label">全ジャンル</span><span class="cat-count">' + questions.length + '問からランダム20問</span>';
+    allBtn.addEventListener('click', () => startFn(questions));
+    container.appendChild(allBtn);
+
+    // Per-category buttons
+    const categories = getCategories(questions);
+    for (let i = 0; i < categories.length; i++) {
+      const cat = categories[i];
+      const catQuestions = questions.filter(q => q.category === cat);
+      const btn = document.createElement('button');
+      btn.className = 'category-btn';
+      const qCount = catQuestions.length;
+      const displayCount = qCount < 20 ? qCount + '問すべて出題' : '20問出題';
+      btn.innerHTML = '<span class="cat-num">' + String(i + 1).padStart(2, '0') + '</span><span class="cat-label">' + esc(cat) + '</span><span class="cat-count">' + qCount + '問中' + displayCount + '</span>';
+      btn.addEventListener('click', () => startFn(catQuestions));
+      container.appendChild(btn);
+    }
   }
 
   // --- ○× Test ---
@@ -648,10 +694,19 @@
     $('#' + containerId).innerHTML = html;
     showPage(pageId, '結果');
 
-    const retryQuestions = type === 'marubatsu' ? state.marubatsuQuestions : state.yontakuQuestions;
-    const startFn = type === 'marubatsu' ? startMarubatsu : startYontaku;
-
-    $('#' + type + '-retry').addEventListener('click', () => startFn(retryQuestions));
+    $('#' + type + '-retry').addEventListener('click', () => {
+      if (type === 'marubatsu') {
+        showMarubatsuStats();
+        renderCategoryButtons('marubatsu-categories', state.marubatsuQuestions, startMarubatsu, 'marubatsu');
+        state.pageHistory = ['top-page', 'marubatsu-page'];
+        showPage('marubatsu-page', '○×テスト');
+      } else {
+        showYontakuStats();
+        renderCategoryButtons('yontaku-categories', state.yontakuQuestions, startYontaku, 'yontaku');
+        state.pageHistory = ['top-page', 'yontaku-page'];
+        showPage('yontaku-page', '4択問題');
+      }
+    });
     $('#' + type + '-back-top').addEventListener('click', () => {
       state.pageHistory = ['top-page'];
       showPage('top-page', '学習アプリ');
@@ -781,9 +836,11 @@
           showPage('report-page', 'レポート');
         } else if (page === 'marubatsu') {
           showMarubatsuStats();
+          renderCategoryButtons('marubatsu-categories', state.marubatsuQuestions, startMarubatsu, 'marubatsu');
           showPage('marubatsu-page', '○×テスト');
         } else if (page === 'yontaku') {
           showYontakuStats();
+          renderCategoryButtons('yontaku-categories', state.yontakuQuestions, startYontaku, 'yontaku');
           showPage('yontaku-page', '4択問題');
         }
       });
@@ -794,14 +851,7 @@
       btn.addEventListener('click', () => showReport(btn.dataset.section));
     });
 
-    // ○× start/review
-    $('#marubatsu-start').addEventListener('click', () => {
-      if (!state.dataLoaded || state.marubatsuQuestions.length === 0) {
-        alert('問題データを読み込み中です。しばらくお待ちください。');
-        return;
-      }
-      startMarubatsu(state.marubatsuQuestions);
-    });
+    // ○× review
     $('#marubatsu-review').addEventListener('click', () => showReview('marubatsu'));
 
     // ○× answer buttons
@@ -812,14 +862,7 @@
     });
     $('#marubatsu-next').addEventListener('click', nextMarubatsu);
 
-    // 4択 start/review
-    $('#yontaku-start').addEventListener('click', () => {
-      if (!state.dataLoaded || state.yontakuQuestions.length === 0) {
-        alert('問題データを読み込み中です。しばらくお待ちください。');
-        return;
-      }
-      startYontaku(state.yontakuQuestions);
-    });
+    // 4択 review
     $('#yontaku-review').addEventListener('click', () => showReview('yontaku'));
     $('#yontaku-next').addEventListener('click', nextYontaku);
 

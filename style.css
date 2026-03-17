@@ -928,6 +928,79 @@ header h1 {
   color: var(--text-secondary);
 }
 
+/* Category Selection Buttons */
+.category-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.category-btn {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: var(--shadow);
+  text-align: left;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.category-btn:active {
+  background: var(--primary-50);
+  border-color: var(--primary);
+  transform: scale(0.98);
+}
+
+.category-btn.all-category {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.category-btn.all-category:active {
+  background: var(--primary-dark);
+}
+
+.category-btn.all-category .cat-count {
+  color: rgba(255,255,255,0.8);
+}
+
+.cat-icon {
+  font-size: 1.3rem;
+}
+
+.cat-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 3px 8px;
+  border-radius: 6px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.cat-label {
+  flex: 1;
+  font-weight: 600;
+}
+
+.cat-count {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
 /* Responsive */
 @media (min-width: 600px) {
   .marubatsu-buttons {
